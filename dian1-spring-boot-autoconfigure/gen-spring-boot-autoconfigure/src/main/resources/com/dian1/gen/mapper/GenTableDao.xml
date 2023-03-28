@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dian1.gen.mapper.GenTableDao">
+
+
+    <select id="showTables" resultType="java.lang.String">
+        select TABLE_NAME
+        from information_schema.TABLES
+        where TABLE_SCHEMA = (select database())
+    </select>
+
+    <select id="getTableNameInfo" resultType="java.lang.String">
+        select TABLE_COMMENT
+        from information_schema.TABLES
+        where TABLE_NAME = #{tableName}
+          and TABLE_SCHEMA = (SELECT DATABASE())
+    </select>
+
+
+</mapper>
+

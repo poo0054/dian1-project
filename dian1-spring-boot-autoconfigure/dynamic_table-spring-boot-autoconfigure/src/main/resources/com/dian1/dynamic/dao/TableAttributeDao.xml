@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dian1.dynamic.dao.TableAttributeDao">
+
+    <update id="createTable">
+        -- auto-generated definition
+        create table table_attribute
+        (
+            id        varchar(24) not null comment '主键'
+                primary key,
+            tableCode varchar(24) null comment '表类型',
+            name      varchar(24) null comment '名字',
+            url       varchar(64) null comment '查询地址',
+            urlType   varchar(12) null comment '请求类型',
+            stripe    tinyint(1)  null comment '是否携带斑马纹',
+            border    tinyint(1)  null comment '是否携带边框',
+            height    varchar(24) null comment '高度'
+        ) ENGINE = InnoDB
+          CHARACTER SET = utf8mb4
+          COLLATE = utf8mb4_general_ci
+            comment '表属性';
+    </update>
+
+    <select id="showTable" resultType="java.lang.Integer">
+        select count(*)
+        from information_schema.TABLES
+        where TABLE_SCHEMA=(select database()) and TABLE_NAME in
+        <foreach collection="tableNames" item="tableName" separator="," open="(" close=")">
+            #{tableName}
+        </foreach>
+    </select>
+
+</mapper>
+
