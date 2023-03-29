@@ -6,7 +6,7 @@ import java.lang.annotation.*;
  * @author zhangzhi
  * @date 2023/3/27
  */
-@Target({ElementType.TYPE})
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface OpenHttp {

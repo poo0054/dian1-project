@@ -16,14 +16,14 @@ import org.springframework.stereotype.Component;
 public class DeleteHandle implements TypeHandle<Delete> {
 
     @Override
-    public HttpProperties resolving(HttpProperties properties, Delete t) {
+    public HttpProperties resolving(HttpProperties properties, Delete delete) {
         properties.setMethod(Method.DELETE);
-        properties.setRelativePath(t.value());
-        if (-1 != t.timeout()) {
-            properties.setTimeout(t.timeout());
+        properties.setRelativePath(delete.value());
+        if (-1 != delete.timeout()) {
+            properties.setTimeout(delete.timeout());
         }
-        if (StrUtil.isNotBlank(t.charSet())) {
-            properties.setCharset(CharsetUtil.charset(t.charSet()));
+        if (StrUtil.isNotBlank(delete.charSet())) {
+            properties.setCharset(CharsetUtil.charset(delete.charSet()));
         }
         return properties;
     }

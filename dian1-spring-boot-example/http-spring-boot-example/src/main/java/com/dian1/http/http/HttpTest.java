@@ -1,6 +1,7 @@
 package com.dian1.http.http;
 
 import cn.hutool.core.io.StreamProgress;
+import cn.hutool.http.HttpResponse;
 import com.dian1.http.annotate.OpenHttp;
 import com.dian1.http.annotate.parameter.*;
 import com.dian1.http.annotate.type.Get;
@@ -31,24 +32,29 @@ public interface HttpTest {
 
     @Post("/m1/2406035-0-default/omsContractHead/list")
     @BasicAuth(username = "abc", password = "asd")
-    OmsContractHead basicAuth(@Body Map map);
+    OmsContractHead basicAuth(Map map);
 
     @Post("/m1/2406035-0-default/omsContractHead/list")
     @Header({"Authorization: 123456789", "Accept-Encoding: gzip"})
     OmsContractHead header();
 
     @Post("/m1/2406035-0-default/omsContractHead/list")
-    OmsContractHead headerPar(@Header("Authorization") String str);
+    OmsContractHead headerPar(String str);
 
     @Post("/m1/2406035-0-default/omsContractHead/list")
     OmsContractHead headerMap(@Header Map str);
 
     @Post("https://oms.test.1-dian.cn/oms/gen/download/1637748183482265601")
     @Header("Authorization: Bearer 318e7574-8e33-4a00-8e64-beeb15eb1ce3")
-    void dowFile(File file);
+    HttpResponse dowFile(File file);
 
     @Post("https://oms.test.1-dian.cn/oms/gen/download/1637748183482265601")
     @Header("Authorization: Bearer 318e7574-8e33-4a00-8e64-beeb15eb1ce3")
-    void dowOutputStream(OutputStream outputStream, StreamProgress streamProgress);
+    HttpResponse dowOutputStream(OutputStream outputStream, StreamProgress streamProgress);
 
+    @Post("http://127.0.0.1:4523/m1/2406035-0-default/common/templateUploadFile")
+    void uploadMap(Map<String, Object> map);
+
+    @Post("test")
+    void upload(@Form("file") File file);
 }

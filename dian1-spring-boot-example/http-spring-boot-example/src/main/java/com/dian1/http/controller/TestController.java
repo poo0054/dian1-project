@@ -97,7 +97,7 @@ public class TestController {
 
             @Override
             public void progress(long progressSize) {
-                //如果需要获取全部 从response 的 Content-Length获取总大小
+                //如果需要获取全部大小 从response 的 Content-Length获取总大小
                 System.out.println("当前传了" + progressSize);
             }
 
@@ -106,7 +106,8 @@ public class TestController {
                 System.out.println("结束了");
             }
         };
-        httpTest.dowOutputStream(response.getOutputStream(), streamProgress);
+        HttpResponse httpResponse = httpTest.dowOutputStream(response.getOutputStream(), streamProgress);
+        System.out.println(httpResponse);
     }
 
     @GetMapping("dowFile")
@@ -115,7 +116,28 @@ public class TestController {
         if (file.isFile()) {
             file.createNewFile();
         }
-        httpTest.dowFile(file);
+        HttpResponse httpResponse = httpTest.dowFile(file);
+        System.out.println(httpResponse);
+    }
+
+    @GetMapping("upload")
+    public void upload() throws IOException {
+        File file = new File("D:/test.zip");
+        if (file.isFile()) {
+            file.createNewFile();
+        }
+        httpTest.upload(file);
+    }
+
+    @GetMapping("uploadMap")
+    public void uploadMap() throws IOException {
+        File file = new File("D:/test.zip");
+        if (file.isFile()) {
+            file.createNewFile();
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("file", file);
+        httpTest.uploadMap(map);
     }
 
 }

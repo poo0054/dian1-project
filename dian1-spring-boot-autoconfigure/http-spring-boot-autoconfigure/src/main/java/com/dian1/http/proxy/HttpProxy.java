@@ -1,13 +1,12 @@
 package com.dian1.http.proxy;
 
+import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.io.StreamProgress;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.*;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
-import com.dian1.http.annotate.parameter.Form;
-import com.dian1.http.handle.HttpHandle;
 import com.dian1.http.handle.HttpHandleCompose;
 import com.dian1.http.handle.base.ClassHandle;
 import com.dian1.http.handle.parameter.FormHandle;
@@ -116,6 +115,10 @@ public class HttpProxy<T> implements InvocationHandler {
         }
         if (ObjectUtil.isNotEmpty(properties.getBody())) {
             httpRequest.body(JSON.toJSONString(properties.getBody()));
+        } else {
+            if (ObjectUtil.isNotEmpty(properties.getBodyBytes())) {
+                httpRequest.body(properties.getBodyBytes());
+            }
         }
         httpRequest.timeout(properties.getTimeout());
         httpRequest.setUrlHandler(properties.getUrlHandler());
@@ -160,36 +163,33 @@ public class HttpProxy<T> implements InvocationHandler {
 
     private <V extends Annotation> void buildParameterHandle(Method method, Object[] args, HttpProperties httpProperties) {
         List<ParameterHandle> allParameterHandle = httpHandleCompose.getAllParameterHandle(method);
-        for (ParameterHandle<V> typeHandle : allParameterHandle) {
-            Class<V> typeArgument = (Class<V>) ClassUtil.getTypeArgument(typeHandle.getClass());
+        if (ObjectUtil.isEmpty(allParameterHandle) || ObjectUtil.isEmpty(args)) {
+            return;
+        }
+        for (ParameterHandle<V> parameterHandle : allParameterHandle) {
+            Class<V> typeArgument = (Class<V>) ClassUtil.getTypeArgument(parameterHandle.getClass());
             for (int i = 0; i < method.getParameters().length; i++) {
                 Parameter parameter = method.getParameters()[i];
-                Annotation[] annotations = parameter.getAnnotations();
-                for (Annotation annotation : annotations) {
-                    if (annotation.annotationType().isAssignableFrom(typeArgument)) {
-                        typeHandle.resolving(httpProperties, args[i], (V) annotation);
-                    }
-                }
-                //form默认进行处理
-                if (ObjectUtil.isEmpty(annotations) &&
-                        ObjectUtil.isEmpty(httpProperties.getBody()) &&
-                        !linkedList.contains(parameter.getType())) {
-                    String[] parameterNames = new DefaultParameterNameDiscoverer().getParameterNames(method);
-                    HttpHandle httpHandle = HttpHandleCompose.getHandleHashMap().get(Form.class);
-                    if (FormHandle.class.isAssignableFrom(httpHandle.getClass())) {
-                        //TODO 适配不填写参数的方式添加form
-                        FormHandle httpHandle1 = (FormHandle) httpHandle;
+                V annotation = AnnotationUtils.findAnnotation(parameter, typeArgument);
+                //处理自动添加form属性
+                if (ObjectUtil.isNotEmpty(annotation)) {
+                    parameterHandle.resolving(httpProperties, args[i], (V) annotation);
+                } else {
+                    //处理自动添加form属性
+                    if (ObjectUtil.isEmpty(AnnotationUtil.getAnnotations(parameter, true))
+                            && FormHandle.class.isAssignableFrom(parameterHandle.getClass())
+                            && !HttpProxy.linkedList.contains(parameter.getType())) {
+                        String[] parameterNames = new DefaultParameterNameDiscoverer().getParameterNames(method);
+                        FormHandle httpHandle1 = (FormHandle) parameterHandle;
                         httpHandle1.autoResolving(httpProperties, args[i], parameterNames[i]);
                     }
-
                 }
             }
-
         }
     }
 
     private <V extends Annotation> Object buildResultHandle(HttpRequest httpRequest, Method method, HttpProperties httpProperties) {
-        log.info("请求:" + httpRequest + "\n参数:" + httpProperties);
+        log.info("httpRequest:{} \n httpRequest-form:{} \n 参数:{}", httpRequest, httpRequest.form(), httpProperties);
         List<ResultHandle> allParameterHandle = httpHandleCompose.getAllResultHandle(method);
         if (ObjectUtil.isEmpty(allParameterHandle)) {
             return httpHandleCompose.DefaultResultResolving(httpRequest, httpProperties, null);

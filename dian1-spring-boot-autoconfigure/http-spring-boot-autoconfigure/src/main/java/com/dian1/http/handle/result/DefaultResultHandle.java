@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class DefaultResultHandle implements ResultHandle {
+public class DefaultResultHandle extends ResultHandle {
 
 
 }

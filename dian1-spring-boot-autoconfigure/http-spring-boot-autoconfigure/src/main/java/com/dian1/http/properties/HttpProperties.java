@@ -60,6 +60,12 @@ public class HttpProperties implements Serializable {
      * 当使用body时，停止form的使用
      */
     private Map<String, Object> body = new HashMap<>();
+
+    /**
+     * body,只有在body为空才会进行传参
+     */
+    private byte[] bodyBytes;
+
     /**
      * 设置内容主体<br>
      * 请求体body参数支持两种类型：

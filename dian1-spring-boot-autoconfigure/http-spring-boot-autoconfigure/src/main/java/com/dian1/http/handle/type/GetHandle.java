@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class GetHandle implements TypeHandle<Get> {
     @Override
-    public HttpProperties resolving(HttpProperties properties, Get t) {
+    public HttpProperties resolving(HttpProperties properties, Get get) {
         properties.setMethod(Method.GET);
-        properties.setRelativePath(t.value());
-        if (-1 != t.timeout()) {
-            properties.setTimeout(t.timeout());
+        properties.setRelativePath(get.value());
+        if (-1 != get.timeout()) {
+            properties.setTimeout(get.timeout());
         }
-        if (StrUtil.isNotBlank(t.charSet())) {
-            properties.setCharset(CharsetUtil.charset(t.charSet()));
+        if (StrUtil.isNotBlank(get.charSet())) {
+            properties.setCharset(CharsetUtil.charset(get.charSet()));
         }
         return properties;
     }

@@ -12,7 +12,7 @@ import java.lang.annotation.*;
  * @author zhangzhi
  * @date 2023/3/29
  */
-@Target({ElementType.PARAMETER, ElementType.METHOD})
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Auth {
