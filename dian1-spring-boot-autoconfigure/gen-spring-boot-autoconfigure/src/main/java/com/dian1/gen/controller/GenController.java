@@ -30,8 +30,8 @@ public class GenController {
      * @return 表名
      */
     @GetMapping("showTables")
-    public ResponseResult showTables() {
-        return new ResponseResult(genTableService.showTables());
+    public ResponseResult<java.util.List<String>> showTables() {
+        return new ResponseResult<>(genTableService.showTables());
     }
 
     /**
@@ -40,8 +40,8 @@ public class GenController {
      * @return 表名
      */
     @GetMapping("/tableName/{tableName}")
-    public ResponseResult getTableNameInfo(@PathVariable("tableName") String tableName) {
-        return new ResponseResult(genTableService.getTableNameInfo(tableName));
+    public ResponseResult<GenTablePO> getTableNameInfo(@PathVariable("tableName") String tableName) {
+        return new ResponseResult<>(genTableService.getTableNameInfo(tableName));
     }
 
     /**
@@ -50,8 +50,8 @@ public class GenController {
      * @return 表名
      */
     @PostMapping
-    public ResponseResult add(@RequestBody GenTablePO genTablePO) {
-        return new ResponseResult(genTableService.add(genTablePO));
+    public ResponseResult<Boolean> add(@RequestBody GenTablePO genTablePO) {
+        return new ResponseResult<>(genTableService.add(genTablePO));
     }
 
     /**
@@ -60,8 +60,8 @@ public class GenController {
      * @return 结果
      */
     @PutMapping
-    public ResponseResult put(@RequestBody GenTablePO genTablePO) {
-        return new ResponseResult(genTableService.put(genTablePO));
+    public ResponseResult<Boolean> put(@RequestBody GenTablePO genTablePO) {
+        return new ResponseResult<>(genTableService.put(genTablePO));
     }
 
     /**
@@ -70,8 +70,8 @@ public class GenController {
      * @return 表名
      */
     @GetMapping("preview/{tableId}")
-    public ResponseResult preview(@PathVariable("tableId") Long tableId) {
-        return new ResponseResult(genTableService.preview(tableId));
+    public ResponseResult<java.util.Map<String, Object>> preview(@PathVariable("tableId") Long tableId) {
+        return new ResponseResult<>(genTableService.preview(tableId));
     }
 
     /**

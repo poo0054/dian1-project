@@ -8,16 +8,13 @@
     <artifactId>dian1-project</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
+
     <modules>
-        <module>dian1-spring-boot-autoconfigure</module>
-        <module>dian1-spring-boot-starter</module>
-        <module>dian1-spring-boot-example</module>
-        <module>dian1-spring-boot-starter/http-spring-boot-starter</module>
         <module>dian1-spring-boot-dependencies</module>
     </modules>
 
     <properties>
-        <revision>1.0-SNAPSHOT</revision>
+        <revision>1.1-SNAPSHOT</revision>
         <java.version>8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-jar-plugin.version>3.1</maven-jar-plugin.version>
@@ -29,6 +26,11 @@
         <druid.version>1.2.13</druid.version>
         <fastjson.version>1.2.10</fastjson.version>
         <hutool.version>5.7.14</hutool.version>
+
+        <!--        maven-->
+        <flatten-maven.version>1.1.0</flatten-maven.version>
+        <maven-javadoc.version>3.0.0</maven-javadoc.version>
+        <maven-compiler.version>3.1</maven-compiler.version>
     </properties>
 
     <dependencyManagement>
@@ -73,29 +75,108 @@
                 <version>${hutool.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.dian1</groupId>
+                <artifactId>gen-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dian1</groupId>
+                <artifactId>gen-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dian1</groupId>
+                <artifactId>dynamic_table-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dian1</groupId>
+                <artifactId>dynamic_table-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dian1</groupId>
+                <artifactId>http-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.dian1</groupId>
+                <artifactId>http-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>${flatten-maven.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0</version>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten-maven.version}</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten-clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
     </build>
 
     <distributionManagement>

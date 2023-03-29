@@ -15,6 +15,7 @@
     <modules>
         <module>gen-spring-boot-starter</module>
         <module>dynamic_table-spring-boot-starter</module>
+        <module>http-spring-boot-starter</module>
     </modules>
 
     <packaging>pom</packaging>
