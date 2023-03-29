@@ -12,4 +12,24 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Post {
+    /**
+     * 路径
+     *
+     * @return 路径
+     */
+    String value();
+
+    /**
+     * 超时时间
+     *
+     * @return 毫秒
+     */
+    int timeout() default -1;
+
+    /**
+     * 编码
+     *
+     * @return 编码格式
+     */
+    String charSet() default "UTF-8";
 }

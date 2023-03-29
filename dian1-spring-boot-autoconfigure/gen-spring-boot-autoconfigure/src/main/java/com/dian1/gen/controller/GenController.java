@@ -82,6 +82,7 @@ public class GenController {
         byte[] data = genTableService.download(tableId);
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"poo0054.zip\"");
+        response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
         ServletOutputStream outputStream = response.getOutputStream();
         outputStream.write(data);

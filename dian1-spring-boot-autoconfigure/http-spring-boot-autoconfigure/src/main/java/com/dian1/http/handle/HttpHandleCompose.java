@@ -1,18 +1,23 @@
 package com.dian1.http.handle;
 
 import cn.hutool.core.util.ClassUtil;
+import cn.hutool.http.HttpRequest;
+import com.dian1.http.handle.base.ClassHandle;
+import com.dian1.http.handle.parameter.ParameterHandle;
+import com.dian1.http.handle.result.DefaultResultHandle;
+import com.dian1.http.handle.result.ResultHandle;
+import com.dian1.http.handle.type.TypeHandle;
+import com.dian1.http.properties.HttpProperties;
 import lombok.Data;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -22,71 +27,108 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 @Component
 public class HttpHandleCompose {
-    private static Map<Class<? extends Annotation>, HttpHandle> handleHashMap = new HashMap<>();
-    private Map<Class, Set<TypeHandle<? extends Annotation>>> typeHandle = new ConcurrentHashMap<>();
-    private Map<Method, Set<ParameterHandle<? extends Annotation>>> parameterHandle = new ConcurrentHashMap<>();
-    private Map<Class, Set<ResultHandle<? extends Annotation>>> resultHandle = new ConcurrentHashMap<>();
+    private static Map<Class, HttpHandle> handleHashMap = new HashMap<>();
+    @Autowired
+    DefaultResultHandle defaultResultHandle;
+    private Map<Class, List<ClassHandle>> classHandle = new ConcurrentHashMap<>();
+    private Map<Method, List<TypeHandle>> typeHandle = new ConcurrentHashMap<>();
+    private Map<Method, List<ParameterHandle>> parameterHandle = new ConcurrentHashMap<>();
+    private Map<Method, List<ResultHandle>> resultHandle = new ConcurrentHashMap<>();
 
     public HttpHandleCompose(ObjectProvider<HttpHandle> typeHandles) {
-        while (typeHandles.iterator().hasNext()) {
-            HttpHandle handle = typeHandles.iterator().next();
-            Class typeArgument = ClassUtil.getTypeArgument(typeHandle.getClass());
+        Iterator<HttpHandle> iterator = typeHandles.iterator();
+        while (iterator.hasNext()) {
+            HttpHandle handle = iterator.next();
+            Class typeArgument = ClassUtil.getTypeArgument(handle.getClass());
             handleHashMap.put(typeArgument, handle);
         }
     }
 
-    public static Set<TypeHandle<? extends Annotation>> typeHandle(AnnotatedElement element) {
-        Set<TypeHandle<? extends Annotation>> typeHandles = new HashSet<>();
-        for (Class<? extends Annotation> key : handleHashMap.keySet()) {
+    public static List<ClassHandle> classHandle(Class httpinterfaces) {
+        List<ClassHandle> typeHandles = new LinkedList<>();
+        for (Class key : handleHashMap.keySet()) {
+            HttpHandle httpHandle = handleHashMap.get(key);
+            if (httpHandle instanceof ClassHandle) {
+                Annotation annotation = AnnotationUtils.findAnnotation(httpinterfaces, key);
+                if (null != annotation) {
+                    typeHandles.add((ClassHandle) httpHandle);
+                }
+            }
+        }
+        typeHandles.sort(Comparator.comparingInt(sort::order));
+        return typeHandles;
+    }
+
+    public static List<TypeHandle> typeHandle(AnnotatedElement element) {
+        List<TypeHandle> typeHandles = new LinkedList<>();
+        for (Class key : handleHashMap.keySet()) {
             HttpHandle httpHandle = handleHashMap.get(key);
             if (httpHandle instanceof TypeHandle) {
                 Annotation annotation = AnnotationUtils.findAnnotation(element, key);
                 if (null != annotation) {
-                    typeHandles.add((TypeHandle<? extends Annotation>) httpHandle);
+                    typeHandles.add((TypeHandle) httpHandle);
                 }
             }
         }
+        typeHandles.sort(Comparator.comparingInt(sort::order));
         return typeHandles;
     }
 
-    public static Set<ParameterHandle<? extends Annotation>> parameterHandle(AnnotatedElement element) {
-        Set<ParameterHandle<? extends Annotation>> typeHandles = new HashSet<>();
-        for (Class<? extends Annotation> key : handleHashMap.keySet()) {
+    public static List<ParameterHandle> parameterHandle(Method method) {
+        List<ParameterHandle> typeHandles = new LinkedList<>();
+        for (Class key : handleHashMap.keySet()) {
             HttpHandle httpHandle = handleHashMap.get(key);
             if (httpHandle instanceof ParameterHandle) {
-                Annotation annotation = AnnotationUtils.findAnnotation(element, key);
-                if (null != annotation) {
-                    typeHandles.add((ParameterHandle<? extends Annotation>) httpHandle);
+                Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+                for (Annotation[] annotations : parameterAnnotations) {
+                    for (Annotation annotation1 : annotations) {
+                        if (annotation1.annotationType().isAssignableFrom(key)) {
+                            typeHandles.add((ParameterHandle) httpHandle);
+                        }
+                    }
                 }
             }
         }
+        typeHandles.sort(Comparator.comparingInt(sort::order));
         return typeHandles;
     }
 
-    public static Set<ResultHandle<? extends Annotation>> resultHandle(AnnotatedElement element) {
-        Set<ResultHandle<? extends Annotation>> typeHandles = new HashSet<>();
-        for (Class<? extends Annotation> key : handleHashMap.keySet()) {
+    public static List<ResultHandle> resultHandle(AnnotatedElement element) {
+        List<ResultHandle> typeHandles = new LinkedList<>();
+        for (Class key : handleHashMap.keySet()) {
             HttpHandle httpHandle = handleHashMap.get(key);
             if (httpHandle instanceof ResultHandle) {
                 Annotation annotation = AnnotationUtils.findAnnotation(element, key);
                 if (null != annotation) {
-                    typeHandles.add((ResultHandle<? extends Annotation>) httpHandle);
+                    typeHandles.add((ResultHandle) httpHandle);
                 }
             }
         }
+        typeHandles.sort(Comparator.comparingInt(sort::order));
         return typeHandles;
     }
 
-    public <T> Set<TypeHandle<? extends Annotation>> getAllTypeHandle(Class tClass) {
+    public static Map<Class, HttpHandle> getHandleHashMap() {
+        return handleHashMap;
+    }
+
+    public List<ClassHandle> getAllClassHandle(Class aClass) {
+        return classHandle.computeIfAbsent(aClass, HttpHandleCompose::classHandle);
+    }
+
+    public <T> List<TypeHandle> getAllTypeHandle(Method tClass) {
         return typeHandle.computeIfAbsent(tClass, HttpHandleCompose::typeHandle);
     }
 
-    public <T> Set<ParameterHandle<? extends Annotation>> getAllParameterHandle(Method method) {
+    public <T> List<ParameterHandle> getAllParameterHandle(Method method) {
         return parameterHandle.computeIfAbsent(method, HttpHandleCompose::parameterHandle);
     }
 
-    public <T> Set<ResultHandle<? extends Annotation>> getAllResultHandle(Class aClass) {
-        return resultHandle.computeIfAbsent(aClass, HttpHandleCompose::resultHandle);
+    public <T> List<ResultHandle> getAllResultHandle(Method method) {
+        return resultHandle.computeIfAbsent(method, HttpHandleCompose::resultHandle);
     }
 
+    public Object DefaultResultResolving(HttpRequest httpRequest, HttpProperties method, Annotation annotation) {
+        return defaultResultHandle.resolving(httpRequest, method, annotation);
+    }
 }

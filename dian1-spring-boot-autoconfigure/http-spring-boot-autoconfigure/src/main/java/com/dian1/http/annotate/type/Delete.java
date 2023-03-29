@@ -1,7 +1,5 @@
 package com.dian1.http.annotate.type;
 
-import cn.hutool.http.Method;
-
 import java.lang.annotation.*;
 
 /**
@@ -13,6 +11,25 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@BaseHttpType(Method.DELETE)
 public @interface Delete {
+    /**
+     * 路径
+     *
+     * @return 路径
+     */
+    String value();
+
+    /**
+     * 超时时间
+     *
+     * @return 毫秒
+     */
+    int timeout() default -1;
+
+    /**
+     * 编码
+     *
+     * @return 编码格式
+     */
+    String charSet() default "UTF-8";
 }

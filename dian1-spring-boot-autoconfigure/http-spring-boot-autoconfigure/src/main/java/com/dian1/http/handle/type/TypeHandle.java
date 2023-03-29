@@ -1,6 +1,7 @@
-package com.dian1.http.handle;
+package com.dian1.http.handle.type;
 
 
+import com.dian1.http.handle.HttpHandle;
 import com.dian1.http.properties.HttpProperties;
 
 import java.lang.annotation.Annotation;
@@ -11,8 +12,6 @@ import java.lang.annotation.Annotation;
  */
 public interface TypeHandle<T extends Annotation> extends HttpHandle {
 
-
-    void resolving(HttpProperties httpProperties, T typeArgument);
-
+    HttpProperties resolving(HttpProperties properties, T t);
 
 }

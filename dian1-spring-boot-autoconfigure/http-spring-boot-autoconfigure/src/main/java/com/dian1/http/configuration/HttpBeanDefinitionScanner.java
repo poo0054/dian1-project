@@ -64,12 +64,12 @@ public class HttpBeanDefinitionScanner extends ClassPathBeanDefinitionScanner {
             AbstractBeanDefinition beanDefinition = (AbstractBeanDefinition) beanDefinitionHolder.getBeanDefinition();
             Class<?> aClass;
             try {
-                aClass = ClassUtils.forName(beanDefinition.getBeanClassName(), this.getClass().getClassLoader());
+                aClass = ClassUtils.forName(beanDefinition.getBeanClassName(), ClassUtils.getDefaultClassLoader());
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
             beanDefinition.getPropertyValues().add("httpInterfaces", aClass);
-            BeanDefinitionHolder scopedProxy = ScopedProxyUtils.createScopedProxy(beanDefinitionHolder, registry, true);
+            BeanDefinitionHolder scopedProxy = ScopedProxyUtils.createScopedProxy(beanDefinitionHolder, registry, false);
             beanDefinition.setBeanClass(httpFactoryBean);
             if (registry.containsBeanDefinition(scopedProxy.getBeanName())) {
                 registry.removeBeanDefinition(scopedProxy.getBeanName());
