@@ -5,6 +5,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Method;
 import com.dian1.http.annotate.type.Get;
+import com.dian1.http.handle.TypeHandle;
 import com.dian1.http.properties.HttpProperties;
 import org.springframework.stereotype.Component;
 

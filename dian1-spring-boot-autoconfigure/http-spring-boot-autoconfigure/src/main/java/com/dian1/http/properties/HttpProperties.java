@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
+ * 配置对象,根据该对象构建请求对象
+ *
  * @author zhangzhi
  * @date 2023/3/27
  */

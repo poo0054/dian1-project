@@ -1,4 +1,4 @@
-package com.dian1.http.handle.result;
+package com.dian1.http.handle;
 
 
 import cn.hutool.core.util.ObjectUtil;
@@ -6,7 +6,6 @@ import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
-import com.dian1.http.handle.HttpHandle;
 import com.dian1.http.properties.HttpProperties;
 import com.dian1.http.proxy.HttpProxy;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
+ * 处理接口的处理对象
+ *
  * @author zhangzhi
  * @date 2023/3/27
  */
@@ -22,7 +23,12 @@ import java.lang.reflect.Method;
 public abstract class ResultHandle<T extends Annotation> implements HttpHandle {
 
     /**
-     * 值生效一个,第一个生效
+     * 处理接口返回
+     *
+     * @param httpRequest httpRequest
+     * @param properties  properties配置文件
+     * @param annotation  当前注解
+     * @return 接口返回值
      */
     public Object resolving(HttpRequest httpRequest, HttpProperties properties, T annotation) {
         //流 文件 HttpResponse处理
@@ -63,11 +69,17 @@ public abstract class ResultHandle<T extends Annotation> implements HttpHandle {
         throw new HttpException("请求:" + httpRequest + "\n返回:" + response);
     }
 
-    public Object afterresolving(HttpRequest httpRequest, HttpProperties properties, T annotation) {
+    /**
+     * 之前执行对象
+     */
+    public Object beforeResolving(HttpRequest httpRequest, HttpProperties properties, T annotation) {
         return null;
     }
 
-    public Object beforeResolving(HttpRequest httpRequest, HttpProperties properties, T annotation) {
+    /**
+     * 之后执行对象
+     */
+    public Object afterresolving(HttpRequest httpRequest, HttpProperties properties, T annotation) {
         return null;
     }
 
@@ -77,7 +89,6 @@ public abstract class ResultHandle<T extends Annotation> implements HttpHandle {
         }
         return JSON.parseObject(body, method.getGenericReturnType());
     }
-
 
     public Object returnDownload(Class<?> returnType, HttpResponse response, long l) {
         if (returnType.isAssignableFrom(HttpResponse.class)) {

@@ -1,6 +1,7 @@
 package com.dian1.http.handle.parameter;
 
 import com.dian1.http.annotate.parameter.Restful;
+import com.dian1.http.handle.ParameterHandle;
 import com.dian1.http.properties.HttpProperties;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class RestfulHandle implements ParameterHandle<Restful> {
             return openToken + placeholderName + closeToken;
         });
         properties.setRelativePath(parser.parse(relativePath));
-        return null;
+        return properties;
     }
 
     public static class GenericTokenParser {

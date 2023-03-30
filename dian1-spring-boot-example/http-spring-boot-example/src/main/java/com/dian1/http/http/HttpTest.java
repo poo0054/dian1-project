@@ -4,6 +4,7 @@ import cn.hutool.core.io.StreamProgress;
 import cn.hutool.http.HttpResponse;
 import com.dian1.http.annotate.OpenHttp;
 import com.dian1.http.annotate.parameter.*;
+import com.dian1.http.annotate.result.Download;
 import com.dian1.http.annotate.type.Get;
 import com.dian1.http.annotate.type.Post;
 import com.dian1.http.entity.OmsContractHead;
@@ -21,6 +22,11 @@ import java.util.function.Consumer;
 @OpenHttp("127.0.0.1:4523")
 public interface HttpTest {
 
+    /**
+     * get方法
+     *
+     * @return 返回strng
+     */
     @Get("/m1/2406035-0-default/omsProductDetail/get")
     @Auth("123456789")
     String get();

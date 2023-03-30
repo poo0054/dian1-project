@@ -4,12 +4,8 @@ import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
-import com.dian1.http.handle.base.ClassHandle;
 import com.dian1.http.handle.parameter.FormHandle;
-import com.dian1.http.handle.parameter.ParameterHandle;
 import com.dian1.http.handle.result.DefaultResultHandle;
-import com.dian1.http.handle.result.ResultHandle;
-import com.dian1.http.handle.type.TypeHandle;
 import com.dian1.http.properties.HttpProperties;
 import com.dian1.http.proxy.HttpProxy;
 import lombok.Data;
@@ -24,12 +20,17 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 处理器的Compose
+ *
  * @author zhangzhi
  * @date 2023/3/27
  */
 @Data
 @Component
 public class HttpHandleCompose {
+    /**
+     * 用来存储spring中所有的HttpHandle
+     */
     private static Map<Class, HttpHandle> handleHashMap = new HashMap<>();
     @Autowired
     private DefaultResultHandle defaultResultHandle;
@@ -37,9 +38,21 @@ public class HttpHandleCompose {
     @Autowired
     private FormHandle formHandle;
 
+    /**
+     * 对应的ClassHandle的实现
+     */
     private Map<Class, List<ClassHandle>> classHandle = new ConcurrentHashMap<>();
+    /**
+     * 对应的TypeHandle的实现
+     */
     private Map<Method, List<TypeHandle>> typeHandle = new ConcurrentHashMap<>();
+    /**
+     * 对应ParameterHandle的实现
+     */
     private Map<Method, List<ParameterHandle>> parameterHandle = new ConcurrentHashMap<>();
+    /**
+     * 对应ResultHandle的实现
+     */
     private Map<Method, List<ResultHandle>> resultHandle = new ConcurrentHashMap<>();
 
     public HttpHandleCompose(ObjectProvider<HttpHandle> typeHandles) {
@@ -137,6 +150,14 @@ public class HttpHandleCompose {
         return typeHandles;
     }
 
+    /**
+     * 默认的返回处理对象
+     *
+     * @param httpRequest httpRequest
+     * @param method      方法
+     * @param annotation  注解
+     * @return 方法的返回值
+     */
     public Object DefaultResultResolving(HttpRequest httpRequest, HttpProperties method, Annotation annotation) {
         return defaultResultHandle.resolving(httpRequest, method, annotation);
     }
