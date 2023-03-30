@@ -43,9 +43,10 @@ public abstract class ResultHandle<T extends Annotation> implements HttpHandle {
             long l = response.writeBody(properties.getOutputStream(), true, properties.getStreamProgress());
             return returnDownload(returnType, response, l);
         } else if (ObjectUtil.isNotEmpty(properties.getConsumer())) {
-            //TODO 5.5.2不兼容    5.5.14可以
-            properties.getConsumer().accept(httpRequest.execute(properties.isAsync()));
-//            httpRequest.then(properties.getConsumer());
+            // 兼容后面版本
+            try (HttpResponse response = httpRequest.execute(true)) {
+                properties.getConsumer().accept(response);
+            }
             return null;
         } else if (HttpProxy.linkedList.get(4).isAssignableFrom(returnType)) {
             HttpResponse execute = httpRequest.execute(properties.isAsync());
