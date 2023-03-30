@@ -1,7 +1,6 @@
 package com.dian1.http.handle.parameter;
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
 import com.dian1.http.annotate.parameter.Form;
 import com.dian1.http.properties.HttpProperties;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,7 @@ public class FormHandle implements ParameterHandle<Form> {
             form = new HashMap<>();
         }
         if (StrUtil.isNotBlank(restful.value())) {
-            form.put(restful.value(), JSON.toJSONString(arg));
+            form.put(restful.value(), arg);
         } else {
             if (Map.class.isAssignableFrom(arg.getClass())) {
                 form.putAll((Map) arg);
