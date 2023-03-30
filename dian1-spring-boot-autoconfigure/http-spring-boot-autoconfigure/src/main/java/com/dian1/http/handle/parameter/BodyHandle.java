@@ -1,5 +1,6 @@
 package com.dian1.http.handle.parameter;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.dian1.http.annotate.parameter.Body;
@@ -28,6 +29,8 @@ public class BodyHandle implements ParameterHandle<Body> {
         } else {
             if (Map.class.isAssignableFrom(arg.getClass())) {
                 objectMap.putAll((Map) arg);
+            } else {
+                objectMap.putAll(BeanUtil.beanToMap(arg));
             }
         }
         properties.setBody(objectMap);

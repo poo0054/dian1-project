@@ -4,6 +4,7 @@ import com.dian1.http.annotate.EnableHttp;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
@@ -25,6 +26,11 @@ public class HttpRegistrar implements ImportBeanDefinitionRegistrar {
             builder.addPropertyValue("scan", mapperScanAttrs.getStringArray("scan"));
             builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
             registry.registerBeanDefinition(HttpBeanDefinitionRegistry.class.getName(), builder.getBeanDefinition());
+
+            ClassPathBeanDefinitionScanner classPathBeanDefinitionScanner = new ClassPathBeanDefinitionScanner(registry);
+            classPathBeanDefinitionScanner.scan("com.dian1.http.handle");
         }
     }
+
+
 }

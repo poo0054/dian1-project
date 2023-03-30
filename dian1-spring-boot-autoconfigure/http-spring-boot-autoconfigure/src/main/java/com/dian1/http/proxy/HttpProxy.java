@@ -103,7 +103,7 @@ public class HttpProxy<T> implements InvocationHandler {
         String baseUrl = properties.getBaseUrl();
         String url = null;
         if (StrUtil.isNotBlank(baseUrl)) {
-            url = URLUtil.completeUrl(UrlBuilder.ofHttp(baseUrl).build(), properties.getRelativePath());
+            url = URLUtil.completeUrl(UrlBuilder.ofHttp(baseUrl, properties.getCharset()).build(), properties.getRelativePath());
         }
         url = (null == url) ? properties.getRelativePath() : url;
         properties.setUrl(url);

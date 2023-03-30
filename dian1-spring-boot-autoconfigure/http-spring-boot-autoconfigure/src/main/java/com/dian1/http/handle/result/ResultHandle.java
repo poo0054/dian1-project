@@ -12,7 +12,7 @@ import com.dian1.http.proxy.HttpProxy;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
+import java.lang.reflect.Method;
 
 /**
  * @author zhangzhi
@@ -37,7 +37,9 @@ public abstract class ResultHandle<T extends Annotation> implements HttpHandle {
             long l = response.writeBody(properties.getOutputStream(), true, properties.getStreamProgress());
             return returnDownload(returnType, response, l);
         } else if (ObjectUtil.isNotEmpty(properties.getConsumer())) {
-            httpRequest.then(properties.getConsumer());
+            //TODO 5.5.2不兼容    5.5.14可以
+            properties.getConsumer().accept(httpRequest.execute(properties.isAsync()));
+//            httpRequest.then(properties.getConsumer());
             return null;
         } else if (HttpProxy.linkedList.get(4).isAssignableFrom(returnType)) {
             HttpResponse execute = httpRequest.execute(properties.isAsync());
@@ -52,7 +54,7 @@ public abstract class ResultHandle<T extends Annotation> implements HttpHandle {
         log.info("response :{}", response.toString());
         String body = response.body();
         if (response.isOk()) {
-            return returnType(body, returnType);
+            return returnType(body, properties.getMostSpecificMethod());
         }
         Object afterResolving = afterresolving(httpRequest, properties, annotation);
         if (null != afterResolving) {
@@ -69,15 +71,11 @@ public abstract class ResultHandle<T extends Annotation> implements HttpHandle {
         return null;
     }
 
-    public <T> Object returnType(String body, Class<T> returnType) {
-        if (returnType.isAssignableFrom(void.class)) {
+    public <T> Object returnType(String body, Method method) {
+        if (method.getReturnType().isAssignableFrom(void.class)) {
             return null;
         }
-        if (returnType.isAssignableFrom(List.class)) {
-            return JSON.parseArray(body, returnType);
-        } else {
-            return JSON.parseObject(body, returnType);
-        }
+        return JSON.parseObject(body, method.getGenericReturnType());
     }
 
 
