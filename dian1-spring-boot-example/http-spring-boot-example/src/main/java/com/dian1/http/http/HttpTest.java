@@ -8,7 +8,6 @@ import com.dian1.http.annotate.result.Download;
 import com.dian1.http.annotate.type.Get;
 import com.dian1.http.annotate.type.Post;
 import com.dian1.http.entity.OmsContractHead;
-import com.dian1.http.handle.parameter.Download;
 
 import java.io.File;
 import java.io.OutputStream;
