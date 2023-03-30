@@ -7,6 +7,7 @@ import com.dian1.http.annotate.parameter.*;
 import com.dian1.http.annotate.type.Get;
 import com.dian1.http.annotate.type.Post;
 import com.dian1.http.entity.OmsContractHead;
+import com.dian1.http.handle.parameter.Download;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -46,11 +47,11 @@ public interface HttpTest {
 
     @Post("https://oms.test.1-dian.cn/oms/gen/download/1637748183482265601")
     @Header("Authorization: Bearer 318e7574-8e33-4a00-8e64-beeb15eb1ce3")
-    HttpResponse dowFile(File file);
+    HttpResponse dowFile(@Download File file);
 
     @Post("https://oms.test.1-dian.cn/oms/gen/download/1637748183482265601")
     @Header("Authorization: Bearer 318e7574-8e33-4a00-8e64-beeb15eb1ce3")
-    HttpResponse dowOutputStream(OutputStream outputStream, StreamProgress streamProgress);
+    HttpResponse dowOutputStream(@Download OutputStream outputStream, StreamProgress streamProgress);
 
     @Post("http://127.0.0.1:4523/m1/2406035-0-default/common/templateUploadFile")
     void uploadMap(Map<String, Object> map);

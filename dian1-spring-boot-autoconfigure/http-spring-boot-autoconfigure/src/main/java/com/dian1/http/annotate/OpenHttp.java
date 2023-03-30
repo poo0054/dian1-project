@@ -19,5 +19,10 @@ public @interface OpenHttp {
      */
     String value() default "";
 
-
+    /**
+     * 超时时间
+     *
+     * @return 毫秒
+     */
+    int timeout() default -1;
 }
