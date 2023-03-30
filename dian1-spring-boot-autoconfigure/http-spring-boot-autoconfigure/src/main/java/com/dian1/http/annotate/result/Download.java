@@ -1,4 +1,4 @@
-package com.dian1.http.annotate.parameter;
+package com.dian1.http.annotate.result;
 
 import java.lang.annotation.*;
 

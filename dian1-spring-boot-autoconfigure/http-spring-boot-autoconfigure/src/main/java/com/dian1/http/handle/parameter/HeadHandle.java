@@ -1,7 +1,8 @@
 package com.dian1.http.handle.parameter;
 
 import com.dian1.http.annotate.parameter.Header;
-import com.dian1.http.handle.type.TypeHandle;
+import com.dian1.http.handle.ParameterHandle;
+import com.dian1.http.handle.TypeHandle;
 import com.dian1.http.properties.HttpProperties;
 import org.springframework.stereotype.Component;
 

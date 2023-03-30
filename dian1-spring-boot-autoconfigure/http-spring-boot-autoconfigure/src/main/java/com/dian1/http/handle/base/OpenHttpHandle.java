@@ -1,6 +1,7 @@
 package com.dian1.http.handle.base;
 
 import com.dian1.http.annotate.OpenHttp;
+import com.dian1.http.handle.ClassHandle;
 import com.dian1.http.properties.HttpProperties;
 import lombok.Data;
 import org.springframework.stereotype.Component;

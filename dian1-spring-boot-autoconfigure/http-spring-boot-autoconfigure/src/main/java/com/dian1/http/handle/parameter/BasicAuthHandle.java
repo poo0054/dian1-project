@@ -4,7 +4,8 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpUtil;
 import com.dian1.http.annotate.parameter.BasicAuth;
-import com.dian1.http.handle.type.TypeHandle;
+import com.dian1.http.handle.ParameterHandle;
+import com.dian1.http.handle.TypeHandle;
 import com.dian1.http.properties.HttpProperties;
 import org.springframework.stereotype.Component;
 

@@ -3,8 +3,11 @@ package com.dian1.http.annotate.parameter;
 import java.lang.annotation.*;
 
 /**
+ * 值放在请求的Body中
+ *
  * @author zhangzhi
  * @date 2023/3/27
+ * @see com.dian1.http.handle.parameter.BodyHandle
  */
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

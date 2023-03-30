@@ -12,6 +12,7 @@ import java.lang.annotation.*;
  *
  * @author zhangzhi
  * @date 2023/3/27
+ * @see com.dian1.http.handle.parameter.BasicAuthHandle
  */
 @Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)

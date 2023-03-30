@@ -7,12 +7,8 @@ import cn.hutool.core.util.*;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
-import com.dian1.http.handle.HttpHandleCompose;
-import com.dian1.http.handle.base.ClassHandle;
+import com.dian1.http.handle.*;
 import com.dian1.http.handle.parameter.FormHandle;
-import com.dian1.http.handle.parameter.ParameterHandle;
-import com.dian1.http.handle.result.ResultHandle;
-import com.dian1.http.handle.type.TypeHandle;
 import com.dian1.http.properties.HttpProperties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +29,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
+ * 接口的代理对象
+ *
  * @author zhangzhi
  * @date 2023/3/27
  */
