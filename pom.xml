@@ -31,6 +31,7 @@
         <flatten-maven.version>1.1.0</flatten-maven.version>
         <maven-javadoc.version>3.0.0</maven-javadoc.version>
         <maven-compiler.version>3.1</maven-compiler.version>
+        <maven-source.version>3.2.1</maven-source.version>
     </properties>
 
     <dependencyManagement>
@@ -131,6 +132,11 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -175,19 +181,27 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <!-- 绑定source插件到Maven的生命周期,并在生命周期后执行绑定的source的goal -->
+                <executions>
+                    <execution>
+                        <!-- 绑定source插件到Maven的生命周期 -->
+                        <phase>compile</phase>
+                        <!--在生命周期后执行绑定的source插件的goals -->
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
     </build>
 
     <distributionManagement>
-        <!--<snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>-->
-        <!--<repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>-->
         <repository>
             <id>yidian</id>
             <name>maven-releases</name>
