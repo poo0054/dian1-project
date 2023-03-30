@@ -26,7 +26,7 @@ public class RestfulHandle implements ParameterHandle<Restful> {
             return openToken + placeholderName + closeToken;
         });
         properties.setRelativePath(parser.parse(relativePath));
-        return null;
+        return properties;
     }
 
     public static class GenericTokenParser {

@@ -16,6 +16,7 @@ public class OpenHttpHandle implements ClassHandle<OpenHttp> {
 
     public HttpProperties resolving(HttpProperties httpProperties, OpenHttp openHttp) {
         httpProperties.setBaseUrl(openHttp.value());
-        return null;
+        httpProperties.setTimeout(openHttp.timeout());
+        return httpProperties;
     }
 }
