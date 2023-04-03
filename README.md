@@ -38,7 +38,86 @@
 
 > 案例
 
-使用案例[HttpTest.java](..%2F..%2Fdian1-spring-boot-example%2Fhttp-spring-boot-example%2Fsrc%2Fmain%2Fjava%2Fcom%2Fdian1%2Fhttp%2Fhttp%2FHttpTest.java)
+使用案例
+
+```java
+/**
+ * @author zhangzhi
+ * @date 2023/3/28
+ */
+@RestController
+public class TestController {
+   @Autowired
+   HttpTest httpTest;
+
+   @GetMapping
+   public String get() {
+      return httpTest.get();
+   }
+
+   @GetMapping("{code}")
+   public String test(@PathVariable("code") String code) {
+      Map<Object, Object> map = new HashMap<>();
+      map.put("username", "张三");
+      map.put("password", "123456");
+      return httpTest.restful(map, code);
+   }
+}
+
+//定义
+
+/**
+ * @author zhangzhi
+ * @date 2023/3/27
+ */
+@OpenHttp("127.0.0.1:4523")
+public interface HttpTest {
+
+   /**
+    * get方法
+    *
+    * @return 返回strng
+    */
+   @Get("/m1/2406035-0-default/omsProductDetail/get")
+   @Auth("123456789")
+   String get();
+
+   @Get("m1/2406035-0-default/omsProductDetail/getProductCode/{code}")
+   String restful(@BasicAuth Map nu, @Restful("code") String code);
+
+   @Get("m1/2406035-0-default/omsProductHeader/get")
+   void form(String id, Consumer consumer, @Auth("key") Map key);
+
+   @Post("/m1/2406035-0-default/omsContractHead/list")
+   @BasicAuth(username = "abc", password = "asd")
+   OmsContractHead basicAuth(Map map);
+
+   @Post("/m1/2406035-0-default/omsContractHead/list")
+   @Header({"Authorization: 123456789", "Accept-Encoding: gzip"})
+   OmsContractHead header();
+
+   @Post("/m1/2406035-0-default/omsContractHead/list")
+   OmsContractHead headerPar(String str);
+
+   @Post("/m1/2406035-0-default/omsContractHead/list")
+   OmsContractHead headerMap(@Header Map str);
+
+   @Post("https://oms.test.1-dian.cn/oms/gen/download/1637748183482265601")
+   @Header("Authorization: Bearer 318e7574-8e33-4a00-8e64-beeb15eb1ce3")
+   HttpResponse dowFile(@Download File file);
+
+   @Post("https://oms.test.1-dian.cn/oms/gen/download/1637748183482265601")
+   @Header("Authorization: Bearer 318e7574-8e33-4a00-8e64-beeb15eb1ce3")
+   HttpResponse dowOutputStream(@Download OutputStream outputStream, StreamProgress streamProgress);
+
+   @Post("http://127.0.0.1:4523/m1/2406035-0-default/common/templateUploadFile")
+   void uploadMap(Map<String, Object> map);
+
+   @Post("test")
+   void upload(@Form("file") File file);
+}
+
+```
 
 ---------
 
