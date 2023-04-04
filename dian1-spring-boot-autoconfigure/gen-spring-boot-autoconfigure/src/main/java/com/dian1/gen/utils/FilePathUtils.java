@@ -1,6 +1,5 @@
 package com.dian1.gen.utils;
 
-import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
 import com.dian1.gen.constant.JAVATempleConstant;
 import com.dian1.gen.constant.TypeEnum;
@@ -28,14 +27,14 @@ public class FilePathUtils {
             buffer.append(genTablePO.getFunctionName().replace(".", "/"));
             buffer.append("/");
             buffer.append(ftlName.substring(0, ftlName.lastIndexOf("/") + 1));
-            buffer.append(CharSequenceUtil.upperFirst(StrUtil.toCamelCase(genTablePO.getTableName())));
+            buffer.append(StrUtil.upperFirst(StrUtil.toCamelCase(genTablePO.getTableName())));
             String substring = ftlName.substring(ftlName.lastIndexOf("/") + 1);
             //全部大写
             if (substring.equals("vo")) {
-                buffer.append(CharSequenceUtil.swapCase(substring));
+                buffer.append(StrUtil.swapCase(substring));
             } else {
                 //首字母大写
-                buffer.append(CharSequenceUtil.upperFirst(substring));
+                buffer.append(StrUtil.upperFirst(substring));
             }
             buffer.append(".");
             if (ftlName.equals(JAVATempleConstant.XML)) {

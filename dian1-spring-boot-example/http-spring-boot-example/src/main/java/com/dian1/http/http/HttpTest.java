@@ -8,6 +8,7 @@ import com.dian1.http.annotate.result.Download;
 import com.dian1.http.annotate.type.Get;
 import com.dian1.http.annotate.type.Post;
 import com.dian1.http.entity.OmsContractHead;
+import com.dian1.http.entity.Request;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -63,4 +64,7 @@ public interface HttpTest {
 
     @Post("test")
     void upload(@Form("file") File file);
+
+    @Post("https://mock.apifox.cn/m1/2406035-0-default/omsProductDetail/add?apifoxToken=byFyzN6aEZfSNoiLWuoaBc7dvPtTlWo8")
+    void validate(@HttpValidated Request request, @Header("apifoxToken") String hean);
 }

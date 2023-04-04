@@ -3,6 +3,7 @@ package com.dian1.http.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ public class OmsContractHead {
 
     private List<OrdersDTO> orders;
     private Boolean isSearchCount;
+    @NotNull
     private Integer size;
     private Integer start;
     private DataScopeSearchFormDTO dataScopeSearchForm;

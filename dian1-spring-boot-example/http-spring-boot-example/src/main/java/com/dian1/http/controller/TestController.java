@@ -3,6 +3,7 @@ package com.dian1.http.controller;
 import cn.hutool.core.io.StreamProgress;
 import cn.hutool.http.HttpResponse;
 import com.dian1.http.entity.OmsContractHead;
+import com.dian1.http.entity.Request;
 import com.dian1.http.http.HttpTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class TestController {
         return httpTest.get();
     }
 
-    @GetMapping("{code}")
+    @GetMapping("restful/{code}")
     public String test(@PathVariable("code") String code) {
         Map<Object, Object> map = new HashMap<>();
         map.put("username", "张三");
@@ -138,6 +139,17 @@ public class TestController {
         Map<String, Object> map = new HashMap<>();
         map.put("file", file);
         httpTest.uploadMap(map);
+    }
+
+    @GetMapping("validate")
+    public void validate() {
+        Request request = new Request();
+        OmsContractHead omsContractHead = new OmsContractHead();
+        request.setExpenseAccountCode("asd");
+        request.setOmsContractHead(omsContractHead);
+        omsContractHead.setStart(1);
+        String hean = "byFyzN6aEZfSNoiLWuoaBc7dvPtTlWo8";
+        httpTest.validate(request, hean);
     }
 
 }
